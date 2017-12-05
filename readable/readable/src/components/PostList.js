@@ -26,15 +26,8 @@ class PostList extends Component{
 
     sortPosts= function(postsArray){
         const {sortBy}= this.state;
-        var sortedPost
-        if(this.state.sortBy===VOTE){
-            sortedPost =postsArray.sort((a,b)=>(b.post[sortBy]- a.post[sortBy]))
+        var sortedPost =postsArray.sort((a,b)=>(b.post[sortBy]- a.post[sortBy]))
             return(sortedPost)
-        }
-        else{// TIME:
-            sortedPost =postsArray.sort((a,b)=>(a.post[sortBy]- b.post[sortBy]))
-            return(sortedPost)
-        }
     }
 
     remove= function(e){
