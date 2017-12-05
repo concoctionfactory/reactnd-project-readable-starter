@@ -35,8 +35,12 @@ ul.categories-list{
 ul.categories-list li {
     padding: 14px 16px;
     color: #f2f2f2;
-    
 }
+ul.categories-list li a{
+  color: #f2f2f2;
+  text-decoration: none;
+}
+
 
 ul.categories-list li:hover {
   background-color: #50545c;

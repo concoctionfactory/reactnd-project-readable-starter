@@ -1,42 +1,18 @@
 import React, { Component } from 'react';
 import{ connect} from 'react-redux'
-
 import * as API from '../utils/api'
 
 import CategoryList from './CategoryList'
 import PostList from './PostList'
 import CreateFromModal from './CreateFormModal'
-import {addPost, initComment, addCategory} from '../actions'
+import {fetchCategories,fetchPosts} from '../actions'
 
 class App extends Component {
-  state={
-    currentCategory:null,
-  }
-
 
   componentDidMount() {
-    const self = this
-    API.getPosts()
-      //.then((posts) =>console.log(posts))
-      .then((posts) => posts.forEach(function(post){
-        self.props.createPost({post});
-        //if(post.commentCount>0){
-          API.getCommments(post.id)
-        // .then((comments)=>console.log("comments",comments))
-        .then((comments)=> comments.forEach((comment)=>(self.props.createComment({comment}))))
-       // }
-      }))
-      
-    API.getCategories()
-    .then((categories) => categories.forEach(function(category){
-      self.props.createCategory({category});
-    }))
-  }
-
-  categorySelect=(category) =>{
-    this.setState((state)=>({
-      currentCategory: category
-    }))
+    console.log(this.props)
+   this.props.dispatch(fetchCategories());
+   this.props.dispatch(fetchPosts());
   }
 
 
@@ -47,34 +23,51 @@ class App extends Component {
     })))
   }
 
+
   render() {
-    const { currentCategory}= this.state
     const {categoryArray,postArray,createEditModal}= this.props
     
-    // console.log(this.state);
-    // console.log(this.props);
+    console.log(this.props);
+    var categoryFilter =this.props.match.params.category;
+    var idFilter =this.props.match.params.post_id;
+    var isIdValid =  postArray.filter((postItem)=>(postItem.post.id === idFilter)).length>0
+    console.log(isIdValid);
     
     return (
       <div className="App">
-      <CreateFromModal
-        isOpen ={createEditModal.isOpen}
-        dataType={createEditModal.dataType}
-        data={createEditModal.data}
-        mode={createEditModal.mode}
-        parentId={createEditModal.parentId}
-      />
+        <CreateFromModal
+          isOpen ={createEditModal.isOpen}
+          dataType={createEditModal.dataType}
+          data={createEditModal.data}
+          mode={createEditModal.mode}
+          parentId={createEditModal.parentId}
+        />
+
         <CategoryList
           categories={categoryArray}
-          categorySelect ={this.categorySelect}
         />
-        <PostList
-          posts={(currentCategory==null||currentCategory=="all")?postArray :postArray.filter((postItem)=>(postItem.post.category == currentCategory))}
-          postSelect={this.postSelect}
-        />
+
+
+        {isIdValid&&(
+          <PostList
+            posts={postArray.filter((postItem)=>(postItem.post.id === idFilter))}
+          />  
+        )}
+
+        {idFilter&&!isIdValid&&(
+          <div>nothing found</div>
+        )}
+
+        {!idFilter&&(
+          <PostList
+            posts={categoryFilter ? postArray.filter((postItem)=>(postItem.post.category === categoryFilter)): postArray}
+          />  
+        )}
+ 
       </div>
     );
-  }
-}
+  }//render
+}//app
 
 
 function mapStateToProps ({categories, posts, comments, createEdit }) {
@@ -84,9 +77,9 @@ function mapStateToProps ({categories, posts, comments, createEdit }) {
         category.name
       )),
       
-      postArray: Object.values(posts).filter(post=>(post.deleted==false)).map((post)=>({
+      postArray: Object.values(posts).filter(post=>(post.deleted===false)).map((post)=>({
         post: post,
-        comments: Object.values(comments).filter(comment=>comment.parentId==post.id).filter(comment=>(comment.deleted==false))
+        comments: Object.values(comments).filter(comment=>comment.parentId===post.id).filter(comment=>(comment.deleted===false))
       })),
 
       createEditModal: createEdit
@@ -95,12 +88,5 @@ function mapStateToProps ({categories, posts, comments, createEdit }) {
 
 
 
-function mapDispatchToProps(dispatch){
-  return{
-    createCategory:(data)=>dispatch(addCategory(data)),
-    createPost: (data)=> dispatch(addPost(data)),
-    createComment: (data)=>dispatch(initComment(data)),
-  }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps)(App);

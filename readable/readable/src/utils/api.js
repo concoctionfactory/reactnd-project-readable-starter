@@ -44,7 +44,7 @@ export function addPost(post){
 }
 
 export function updatePostScore(postId, isUpvote){
-  var voteStr =(isUpvote=="true")? "upVote" : "downVote"
+  var voteStr =(isUpvote==="true")? "upVote" : "downVote"
   fetch(`${api}/posts/${postId}/`,{
     method:'POST',
     headers:{...headers, 'Content-Type': 'application/json'},
@@ -81,7 +81,7 @@ export function addComment(comment){
 }
 
 export function updateCommentScore(commentId, isUpvote){
-  var voteStr = (isUpvote=="true")? "upVote" : "downVote"
+  var voteStr = (isUpvote==="true")? "upVote" : "downVote"
   fetch(`${api}/comments/${commentId}/`,{
     method:'POST',
     headers:{...headers, 'Content-Type': 'application/json'},

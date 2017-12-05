@@ -25,7 +25,7 @@ class CreateFormModal extends Component {
 
         var post={
             title:this.state.titleVal||"default title",
-            category:this.state.categoryVal||"udacity",
+            category:this.state.categoryVal||"react",
             commentCount:this.props.data?this.props.data.commentCount: 0,
         }
 
@@ -38,27 +38,23 @@ class CreateFormModal extends Component {
         comment ={...obj,...comment}
 
 
-        if (this.props.dataType=="post"){
-            switch(this.props.mode){
-                case "add":
-                    this.props.dispatch(addPost({post}));
-                    break;
-                case "update":
-                    var id =post.id
-                    this.props.dispatch(updatePost({id, post}));
-                    break;
+        if (this.props.dataType==="post"){
+            if(this.props.mode==="add"){
+                this.props.dispatch(addPost({post}));
+            }
+            else{// "update":
+                var id =post.id
+                this.props.dispatch(updatePost({id, post}));
             }
         }
         
         else{//assume comment
-            switch(this.props.mode){
-                case "add":
-                    this.props.dispatch(addPostComment({comment}));
-                    break;
-                case "update":
-                    var tempId =comment.id
-                    this.props.dispatch(updateComment({tempId, comment}));
-                    break;
+            if(this.props.mode==="add"){
+                this.props.dispatch(addPostComment({comment}));
+            }
+            else{// "update":
+                var tempId =comment.id
+                this.props.dispatch(updateComment({tempId, comment}));
             }
         }
            
@@ -109,7 +105,7 @@ class CreateFormModal extends Component {
                 onAfterOpen = {(e)=>this.reset(e)}
             >
 
-            {this.props.dataType=="post"&&(
+            {this.props.dataType==="post"&&(
                 <div>            
                     <label>title</label>
                     <input
@@ -139,7 +135,7 @@ class CreateFormModal extends Component {
                 value={this.state.authorVal} data-state={"authorVal"} onChange={(e)=>this.valChange(e)}
             ></input>
 
-            {this.props.dataType=="post"&&(
+            {this.props.dataType==="post"&&(
                 <div>
                     <label>category</label>
                     <select value={this.state.categoryVal} data-state={"categoryVal"} onChange={(e)=>this.valChange(e)} >
@@ -164,7 +160,7 @@ function mapStateToProps ({categories }) {
     return {
         categoryArray: Object.values(categories).map((category)=>(
         category.name
-        )).filter(category=>(category !="all"))
+        )).filter(category=>(category !=="all"))
     }
 }
 export default connect(mapStateToProps) (CreateFormModal)

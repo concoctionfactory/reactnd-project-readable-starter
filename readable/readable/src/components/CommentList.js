@@ -17,7 +17,7 @@ class CommentList extends Component{
     }
 
     render(){
-    const {comments,parentId} = this.props;
+    const {comments} = this.props;
         return (
             <div>
                 <ul className ='comment-list'>

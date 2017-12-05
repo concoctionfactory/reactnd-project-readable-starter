@@ -1,3 +1,4 @@
+import * as API from '../utils/api'
 export const ADD_CATEGORY ='ADD_CATEGORY'
 
 export const ADD_POST ='ADD_POST'
@@ -15,6 +16,93 @@ export const UPDATE_COMMENT_SCORE ='UPDATE_COMMENT_SCORE'
 export const OPEN_CREATE_EDIT ='OPEN_CREATE_EDIT'
 export const CLOSE_CREATE_EDIT ='CLOSE_CREATE_EDIT'
 
+export const REQUEST_CATEGORIES = 'REQUEST_CATEGORIES'
+export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES'
+export const REQUEST_POSTS = 'REQUEST_POSTS'
+export const RECEIVE_POSTS = 'RECEIVE_POSTS'
+
+
+function requestCategories() {
+  return {
+    type: REQUEST_CATEGORIES
+  }
+}
+
+
+export function fetchCategories () {
+    return dispatch => {
+        dispatch(requestCategories())
+        API.getCategories() 
+        .then(json =>dispatch(recieveCatergories(json)))
+    }
+}
+
+
+export function recieveCatergories(json){
+    return{
+        type:RECEIVE_CATEGORIES,
+        json
+    }
+}
+
+
+
+
+
+
+function requestPosts() {
+    return {
+      type: REQUEST_POSTS
+    }
+  }
+  
+export function fetchPosts () {
+    return dispatch => {
+        dispatch(requestPosts())
+        API.getPosts() 
+       // .then(json =>dispatch(recievePosts(json)))
+       .then(function(json){
+            dispatch(recievePosts(json));
+            console.log(json);
+            json.forEach(post=>dispatch(fetchComments(post.id)))
+       })
+    }
+}
+
+export function recievePosts(json){
+    return{
+        type:RECEIVE_POSTS,
+        json
+    }
+}
+
+
+export const REQUEST_COMMENTS= 'REQUEST_COMMENTS'
+export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
+
+
+function requestComments() {
+    return {
+      type: REQUEST_COMMENTS
+    }
+  }
+  
+export function fetchComments (postId) {
+    return dispatch => {
+        dispatch(requestComments())
+        API.getCommments(postId) 
+        .then(json =>dispatch(recieveComments(json)))
+    }
+}
+
+export function recieveComments(json){
+    return{
+        type:RECEIVE_COMMENTS,
+        json
+    }
+}
+
+
 
 export function openCreateEdit({ dataType, data, mode, parentId}){
     return{
@@ -25,7 +113,6 @@ export function openCreateEdit({ dataType, data, mode, parentId}){
         parentId
     }
 }
-
 
 export function closeCreateEdit(){
     return{
@@ -74,6 +161,8 @@ export function updatePostScore({id, isScoreUp}){
 }
 
 
+
+
 export function addPostComment  ({parentId,comment}){
     return{
         type: ADD_POST_COMMENT,
@@ -113,3 +202,5 @@ export function updateCommentScore({id, isScoreUp}){
         isScoreUp
     }
 }
+
+

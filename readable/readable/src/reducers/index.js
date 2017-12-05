@@ -1,20 +1,26 @@
 import { combineReducers } from 'redux'
 import * as API from '../utils/api'
-import {addPostComment} from '../actions'
 
 import{
     ADD_CATEGORY,
+    REQUEST_CATEGORIES,
+    RECEIVE_CATEGORIES,
 
     ADD_POST,
     REMOVE_POST,
     UPDATE_POST,
     UPDATE_POST_SCORE,
+    REQUEST_POSTS,
+    RECEIVE_POSTS,
 
     INIT_COMMENT,
     ADD_POST_COMMENT,
     REMOVE_COMMENT,
     UPDATE_COMMENT_SCORE,
     UPDATE_COMMENT,
+
+    REQUEST_COMMENTS,
+    RECEIVE_COMMENTS,
 
     OPEN_CREATE_EDIT,
     CLOSE_CREATE_EDIT
@@ -64,12 +70,21 @@ function createEdit(state= initalCreateEdit, action){
 
 
 function categories(state=initialCategories, action){
-    const{category}=action
     switch(action.type){
         case ADD_CATEGORY:
             return{
                 ...state,
                 [action.category.name]:action.category
+            }
+        case RECEIVE_CATEGORIES:
+
+        
+        var categoryObjArray= action.json.reduce((obj, item) => {
+          obj[item.name] = item
+          return obj
+        }, {})
+            return{
+                ...state,...categoryObjArray ,
             }
         default:
             return state;
@@ -78,8 +93,17 @@ function categories(state=initialCategories, action){
 
 
 function posts(state={},action){
-    const{post, id, title, parentId} =action
     switch(action.type){
+        case RECEIVE_POSTS:
+            var posts= action.json.reduce((obj, item) => {
+                obj[item.id] = item
+                return obj
+            }, {})
+            return{
+                ...posts
+            }
+
+
         case ADD_POST:
             API.addPost(action.post);
             return{
@@ -92,7 +116,7 @@ function posts(state={},action){
             return{
                 ...state,
                 [action.id]:{
-                    ...state[id],
+                    ...state[action.id],
                     deleted: "true"
                 }
         }
@@ -109,8 +133,8 @@ function posts(state={},action){
             return{
                 ...state,
                 [action.id]:{
-                    ...state[id],
-                    voteScore: (action.isScoreUp=="true"?(state[id].voteScore+1):(state[id].voteScore-1))
+                    ...state[action.id],
+                    voteScore: (action.isScoreUp==="true"?(state[action.id].voteScore+1):(state[action.id].voteScore-1))
                 }
             }
 
@@ -139,8 +163,18 @@ function posts(state={},action){
 
 
 function comments(state={}, action){
-    const{comment, id, title, parentId} =action
     switch(action.type){
+        case RECEIVE_COMMENTS:
+            var commentObjArray= action.json.reduce((obj, item) => {
+                obj[item.id] = item
+                return obj
+            }, {})
+            console.log(commentObjArray);
+            return{
+                ...state,...commentObjArray ,
+            }
+
+
         case INIT_COMMENT:
             API.addComment(action.comment);
             return{
@@ -174,8 +208,8 @@ function comments(state={}, action){
             return{
                 ...state,
                 [action.id]:{
-                    ...state[id],
-                    voteScore: (action.isScoreUp=="true"?(state[id].voteScore+1):(state[id].voteScore-1))
+                    ...state[action.id],
+                    voteScore: (action.isScoreUp==="true"?(state[action.id].voteScore+1):(state[action.id].voteScore-1))
                 }
             }
         default:
