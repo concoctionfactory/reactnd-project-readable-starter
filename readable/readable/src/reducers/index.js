@@ -1,25 +1,18 @@
 import { combineReducers } from 'redux'
-import * as API from '../utils/api'
 
 import{
-    ADD_CATEGORY,
-    REQUEST_CATEGORIES,
     RECEIVE_CATEGORIES,
 
     ADD_POST,
     REMOVE_POST,
     UPDATE_POST,
     UPDATE_POST_SCORE,
-    REQUEST_POSTS,
     RECEIVE_POSTS,
 
-    INIT_COMMENT,
     ADD_POST_COMMENT,
     REMOVE_COMMENT,
     UPDATE_COMMENT_SCORE,
     UPDATE_COMMENT,
-
-    REQUEST_COMMENTS,
     RECEIVE_COMMENTS,
 
     OPEN_CREATE_EDIT,
@@ -71,18 +64,11 @@ function createEdit(state= initalCreateEdit, action){
 
 function categories(state=initialCategories, action){
     switch(action.type){
-        case ADD_CATEGORY:
-            return{
-                ...state,
-                [action.category.name]:action.category
-            }
         case RECEIVE_CATEGORIES:
-
-        
-        var categoryObjArray= action.json.reduce((obj, item) => {
-          obj[item.name] = item
-          return obj
-        }, {})
+            var categoryObjArray= action.json.reduce((obj, item) => {
+                obj[item.name] = item
+                return obj
+            }, {})
             return{
                 ...state,...categoryObjArray ,
             }
@@ -105,14 +91,12 @@ function posts(state={},action){
 
 
         case ADD_POST:
-            API.addPost(action.post);
             return{
                 ...state,
                [action.post.id]:action.post,
             }
 
         case REMOVE_POST:     
-            API.deletePost(action.id);
             return{
                 ...state,
                 [action.id]:{
@@ -122,14 +106,12 @@ function posts(state={},action){
         }
 
         case UPDATE_POST:
-            API.updatePost(action.id, action.post);
             return{
                 ...state,
                 [action.id]:action.post,
             }
 
         case UPDATE_POST_SCORE:
-            API.updatePostScore(action.id,action.isScoreUp);
             return{
                 ...state,
                 [action.id]:{
@@ -169,26 +151,16 @@ function comments(state={}, action){
                 obj[item.id] = item
                 return obj
             }, {})
-            console.log(commentObjArray);
             return{
                 ...state,...commentObjArray ,
             }
 
-
-        case INIT_COMMENT:
-            API.addComment(action.comment);
-            return{
-                ...state,
-                    [action.comment.id]:action.comment,
-                }
         case ADD_POST_COMMENT:
-            API.addComment(action.comment);
             return{
                 ...state,
                     [action.comment.id]:action.comment,
                 }
         case REMOVE_COMMENT:
-            API.deleteComment(action.id, action.comment);
             return{
                 ...state,
                 [action.id]:{
@@ -197,14 +169,12 @@ function comments(state={}, action){
                 }
             }
         case UPDATE_COMMENT:
-            API.updateComment(action.id, action.comment);
             return{
                 ...state,
                 [action.id]:action.comment,
             }
 
         case UPDATE_COMMENT_SCORE:
-            API.updateCommentScore(action.id,action.isScoreUp);
             return{
                 ...state,
                 [action.id]:{

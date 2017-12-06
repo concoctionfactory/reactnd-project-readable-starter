@@ -1,5 +1,4 @@
 import * as API from '../utils/api'
-export const ADD_CATEGORY ='ADD_CATEGORY'
 
 export const ADD_POST ='ADD_POST'
 export const REMOVE_POST='REMOVE_POST'
@@ -16,28 +15,17 @@ export const UPDATE_COMMENT_SCORE ='UPDATE_COMMENT_SCORE'
 export const OPEN_CREATE_EDIT ='OPEN_CREATE_EDIT'
 export const CLOSE_CREATE_EDIT ='CLOSE_CREATE_EDIT'
 
-export const REQUEST_CATEGORIES = 'REQUEST_CATEGORIES'
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES'
-export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-
-
-function requestCategories() {
-  return {
-    type: REQUEST_CATEGORIES
-  }
-}
+export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
 
 
 export function fetchCategories () {
     return dispatch => {
-        dispatch(requestCategories())
         API.getCategories() 
         .then(json =>dispatch(recieveCatergories(json)))
     }
 }
-
-
 export function recieveCatergories(json){
     return{
         type:RECEIVE_CATEGORIES,
@@ -45,30 +33,16 @@ export function recieveCatergories(json){
     }
 }
 
-
-
-
-
-
-function requestPosts() {
-    return {
-      type: REQUEST_POSTS
-    }
-  }
   
 export function fetchPosts () {
     return dispatch => {
-        dispatch(requestPosts())
         API.getPosts() 
-       // .then(json =>dispatch(recievePosts(json)))
        .then(function(json){
             dispatch(recievePosts(json));
-            console.log(json);
             json.forEach(post=>dispatch(fetchComments(post.id)))
        })
     }
 }
-
 export function recievePosts(json){
     return{
         type:RECEIVE_POSTS,
@@ -77,30 +51,19 @@ export function recievePosts(json){
 }
 
 
-export const REQUEST_COMMENTS= 'REQUEST_COMMENTS'
-export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
-
-
-function requestComments() {
-    return {
-      type: REQUEST_COMMENTS
-    }
-  }
-  
 export function fetchComments (postId) {
     return dispatch => {
-        dispatch(requestComments())
         API.getCommments(postId) 
         .then(json =>dispatch(recieveComments(json)))
     }
 }
-
 export function recieveComments(json){
     return{
         type:RECEIVE_COMMENTS,
         json
     }
 }
+
 
 
 
@@ -120,16 +83,15 @@ export function closeCreateEdit(){
     }
 }
 
-export function addCategory({category}){
-    return{
-        type: ADD_CATEGORY,
-        category
+
+
+
+export function reqAddPost ({post}) {
+    return (dispatch) => {
+        API.addPost(post)
+        .then(() =>dispatch(addPost({post})))
     }
 }
-
-
-
-
 export function addPost ({post}){
     return{
         type: ADD_POST,
@@ -137,6 +99,13 @@ export function addPost ({post}){
     }
 }
 
+
+export function reqRemovePost ({id}) {
+    return (dispatch) => {
+        API.deletePost(id)
+        .then(() =>dispatch(removePost({id})))
+    }
+}
 export function removePost({id}){
     return{
         type:REMOVE_POST,
@@ -144,6 +113,13 @@ export function removePost({id}){
     }
 }
 
+
+export function reqUpdatePost ({id,post}) {
+    return (dispatch) => {
+        API.updatePost(id, post)
+        .then(() =>dispatch(updatePost({id,post})))
+    }
+}
 export function updatePost ({id,post}){
     return{
         type: UPDATE_POST,
@@ -152,6 +128,13 @@ export function updatePost ({id,post}){
     }
 }
 
+
+export function reqUpdatePostScore ({id,isScoreUp}) {
+    return (dispatch) => {
+        API.updatePostScore(id, isScoreUp)
+        .then(() =>dispatch(updatePostScore({id,isScoreUp})))
+    }
+}
 export function updatePostScore({id, isScoreUp}){
     return{
         type: UPDATE_POST_SCORE,
@@ -163,6 +146,15 @@ export function updatePostScore({id, isScoreUp}){
 
 
 
+
+
+
+export function reqAddPostComment  ({parentId,comment}) {
+    return (dispatch) => {
+        API.addComment(comment)
+        .then(() =>dispatch(addPostComment({parentId,comment})))
+    }
+}
 export function addPostComment  ({parentId,comment}){
     return{
         type: ADD_POST_COMMENT,
@@ -171,14 +163,13 @@ export function addPostComment  ({parentId,comment}){
     }
 }
 
-export function initComment ({parentId,comment}){
-    return{
-        type: INIT_COMMENT,
-        parentId: comment.parentId,
-        comment
+
+export function reqRemoveComment  ({id,comment}) {
+    return (dispatch) => {
+        API.deleteComment(id,comment)
+        .then(() =>dispatch(removeComment({id,comment})))
     }
 }
-
 export function removeComment({id, comment}){
     return{
         type:REMOVE_COMMENT,
@@ -187,6 +178,13 @@ export function removeComment({id, comment}){
     }
 }
 
+
+export function reqUpdateComment ({id,comment}) {
+    return (dispatch) => {
+        API.updateComment(id, comment)
+        .then(() =>dispatch(updateComment({id,comment})))
+    }
+}
 export function updateComment ({id,comment}){
     return{
         type: UPDATE_COMMENT,
@@ -195,6 +193,13 @@ export function updateComment ({id,comment}){
     }
 }
 
+
+export function reqUpdateCommentScore ({id,isScoreUp}) {
+    return (dispatch) => {
+        API.updateCommentScore(id, isScoreUp)
+        .then(() =>dispatch(updateCommentScore({id,isScoreUp})))
+    }
+}
 export function updateCommentScore({id, isScoreUp}){
     return{
         type: UPDATE_COMMENT_SCORE,

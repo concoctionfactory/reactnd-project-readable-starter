@@ -10,28 +10,17 @@ import {fetchCategories,fetchPosts} from '../actions'
 class App extends Component {
 
   componentDidMount() {
-    console.log(this.props)
    this.props.dispatch(fetchCategories());
    this.props.dispatch(fetchPosts());
-  }
-
-
-  postSelect=(id)=>{
-    API.getCommments(id)
-    .then((comment)=>this.setState(()=>({
-      comment
-    })))
   }
 
 
   render() {
     const {categoryArray,postArray,createEditModal}= this.props
     
-    console.log(this.props);
     var categoryFilter =this.props.match.params.category;
     var idFilter =this.props.match.params.post_id;
     var isIdValid =  postArray.filter((postItem)=>(postItem.post.id === idFilter)).length>0
-    console.log(isIdValid);
     
     return (
       <div className="App">
@@ -46,7 +35,6 @@ class App extends Component {
         <CategoryList
           categories={categoryArray}
         />
-
 
         {isIdValid&&(
           <PostList
@@ -71,7 +59,6 @@ class App extends Component {
 
 
 function mapStateToProps ({categories, posts, comments, createEdit }) {
-  console.log(createEdit) 
   return {
       categoryArray: Object.values(categories).map((category)=>(
         category.name

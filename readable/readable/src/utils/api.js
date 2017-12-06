@@ -36,7 +36,7 @@ export function getCommments (postId){
 
 
 export function addPost(post){
-  fetch(`${api}/posts/`,{
+  return fetch(`${api}/posts/`,{
     method:'POST',
     headers:{...headers,'Content-Type':  'application/json'},
     body: JSON.stringify( post )
@@ -45,7 +45,7 @@ export function addPost(post){
 
 export function updatePostScore(postId, isUpvote){
   var voteStr =(isUpvote==="true")? "upVote" : "downVote"
-  fetch(`${api}/posts/${postId}/`,{
+  return fetch(`${api}/posts/${postId}/`,{
     method:'POST',
     headers:{...headers, 'Content-Type': 'application/json'},
     body: JSON.stringify( {option :voteStr} )
@@ -54,7 +54,7 @@ export function updatePostScore(postId, isUpvote){
 
 
 export function updatePost(postId, post){
-  fetch(`${api}/posts/${postId}/`,{
+  return fetch(`${api}/posts/${postId}/`,{
     method:'PUT',
     headers:{...headers,'Content-Type':  'application/json'},
     body: JSON.stringify( post )
@@ -62,7 +62,7 @@ export function updatePost(postId, post){
 }
 
 export function deletePost(postId){
-  fetch(`${api}/posts/${postId}/`,{
+  return fetch(`${api}/posts/${postId}/`,{
     method:'DELETE',
     headers:{...headers},
   })
@@ -72,8 +72,7 @@ export function deletePost(postId){
 
 
 export function addComment(comment){
-  console.log(comment);
-  fetch(`${api}/comments/`,{
+  return fetch(`${api}/comments/`,{
     method:'POST',
     headers:{...headers,'Content-Type':  'application/json'},
     body: JSON.stringify( comment )
@@ -82,7 +81,7 @@ export function addComment(comment){
 
 export function updateCommentScore(commentId, isUpvote){
   var voteStr = (isUpvote==="true")? "upVote" : "downVote"
-  fetch(`${api}/comments/${commentId}/`,{
+  return fetch(`${api}/comments/${commentId}/`,{
     method:'POST',
     headers:{...headers, 'Content-Type': 'application/json'},
     body: JSON.stringify( {option :voteStr} )
@@ -90,7 +89,7 @@ export function updateCommentScore(commentId, isUpvote){
 }
 
 export function updateComment(commentId, comment){
-  fetch(`${api}/comments/${commentId}/`,{
+  return fetch(`${api}/comments/${commentId}/`,{
     method:'PUT',
     headers:{...headers,'Content-Type':  'application/json'},
     body: JSON.stringify( comment )
@@ -98,7 +97,7 @@ export function updateComment(commentId, comment){
 }
 
 export function deleteComment(commentId){
-  fetch(`${api}/comments/${commentId}/`,{
+  return fetch(`${api}/comments/${commentId}/`,{
     method:'DELETE',
     headers:{...headers},
   })

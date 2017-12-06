@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 
 import VoteScore from './VoteScore'
 
-import {removeComment, updateCommentScore,openCreateEdit} from '../actions'
+import {reqRemoveComment, reqUpdateCommentScore,openCreateEdit} from '../actions'
 const TIME = "timestamp";
 
 
 class CommentList extends Component{
     remove= function(comment){
         var id =comment.id;
-        this.props.dispatch(removeComment({id, comment}))
+        this.props.dispatch(reqRemoveComment({id, comment}))
     }
     openModal= function(dataType,data, mode,parentId){
        this.props.dispatch(openCreateEdit({dataType,data, mode,parentId}))
@@ -35,7 +35,7 @@ class CommentList extends Component{
                             </div>
 
                             <div className="footer">
-                            <VoteScore id = {comment.id} score={comment.voteScore} action={updateCommentScore} />
+                            <VoteScore id = {comment.id} score={comment.voteScore} action={reqUpdateCommentScore} />
                             </div>
 
                             <hr/>

@@ -1,13 +1,15 @@
 # Readable Project
-This s content and comment web app. Users will be able to post content to predefined categories, comment on their posts and other users' posts, and vote on posts and comments. Users will also be able to edit and delete posts and comments.
-* To Install and start the API server
-    - `npm install`
+This is a content and comment web app. Users will be able to post content to predefined categories, comment on their posts and other users' posts, and vote on posts and comments. Users will also be able to edit and delete posts and comments.
+
 
 
 
 ## Front end
 
 The frontend uses react, redux, and middleware redux-thunk for async api calls and react-router-dom for the routing
+* To Install dependencies 
+    - `npm install`
+
 * To Run Project
     - `npm start`
 

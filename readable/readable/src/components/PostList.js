@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import CommentList from './CommentList'
 import VoteScore from './VoteScore'
 import {Link} from 'react-router-dom'
-import {removePost,updatePostScore,openCreateEdit} from '../actions'
+import {reqRemovePost,reqUpdatePostScore,openCreateEdit} from '../actions'
 
 
 const VOTE ="voteScore";
@@ -32,7 +32,7 @@ class PostList extends Component{
 
     remove= function(e){
         var id =e.target.value;
-        this.props.dispatch(removePost({id}))
+        this.props.dispatch(reqRemovePost({id}))
     }
 
 
@@ -75,7 +75,7 @@ class PostList extends Component{
                             </div>
 
                             <div className="footer">
-                                <VoteScore id = {postItem.post.id} score={postItem.post.voteScore} action={updatePostScore} />
+                                <VoteScore id = {postItem.post.id} score={postItem.post.voteScore} action={reqUpdatePostScore} />
 
                                 <div className="comment-info">
                                     <span>{postItem.post.commentCount} comments</span>

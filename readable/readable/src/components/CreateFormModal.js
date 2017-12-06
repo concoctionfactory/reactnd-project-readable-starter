@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import{ connect} from 'react-redux'
 import Modal from 'react-modal'
-import {addPost, updatePost,addPostComment,updateComment, closeCreateEdit} from '../actions'
+import {reqAddPost, reqUpdatePost,reqAddPostComment,reqUpdateComment, closeCreateEdit,} from '../actions'
 
 
 class CreateFormModal extends Component {
@@ -40,21 +40,21 @@ class CreateFormModal extends Component {
 
         if (this.props.dataType==="post"){
             if(this.props.mode==="add"){
-                this.props.dispatch(addPost({post}));
+                this.props.dispatch(reqAddPost({post}));
             }
             else{// "update":
                 var id =post.id
-                this.props.dispatch(updatePost({id, post}));
+                this.props.dispatch(reqUpdatePost({id, post}));
             }
         }
         
         else{//assume comment
             if(this.props.mode==="add"){
-                this.props.dispatch(addPostComment({comment}));
+                this.props.dispatch(reqAddPostComment({comment}));
             }
             else{// "update":
-                var tempId =comment.id
-                this.props.dispatch(updateComment({tempId, comment}));
+                var id =comment.id
+                this.props.dispatch(reqUpdateComment({id, comment}));
             }
         }
            
